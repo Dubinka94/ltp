@@ -65,29 +65,30 @@ static int
 ltp_clone_(unsigned long flags, int (*fn)(void *arg), void *arg,
 	   size_t stack_size, void *stack, pid_t *ptid, void *tls, pid_t *ctid)
 {
-	int ret;
-
-#if defined(__ia64__)
-	ret = __clone2(fn, stack, stack_size, flags, arg, ptid, tls, ctid);
-#else
-# if defined(__hppa__) || defined(__metag__)
-	/*
-	 * These arches grow their stack up, so don't need to adjust the base.
-	 * XXX: This should be made into a runtime test.
-	 */
-# else
-	/*
-	 * For archs where stack grows downwards, stack points to the topmost
-	 * address of the memory space set up for the child stack.
-	 */
-	if (stack)
-		stack += stack_size;
-# endif
-
-	ret = clone(fn, stack, flags, arg, ptid, tls, ctid);
-#endif
-
-	return ret;
+//    int ret;
+//
+//#if defined(__ia64__)
+//    ret = __clone2(fn, stack, stack_size, flags, arg, ptid, tls, ctid);
+//#else
+//# if defined(__hppa__) || defined(__metag__)
+//    /*
+//     * These arches grow their stack up, so don't need to adjust the base.
+//     * XXX: This should be made into a runtime test.
+//     */
+//# else
+//    /*
+//     * For archs where stack grows downwards, stack points to the topmost
+//     * address of the memory space set up for the child stack.
+//     */
+//    if (stack)
+//        stack += stack_size;
+//# endif
+//
+//    ret = clone(fn, stack, flags, arg, ptid, tls, ctid);
+//#endif
+//
+//    return ret;
+    return -1;
 }
 
 int ltp_clone(unsigned long flags, int (*fn)(void *arg), void *arg,

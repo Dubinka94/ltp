@@ -14,7 +14,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <malloc.h>
+#include <malloc/malloc.h>
 #include "test.h"
 #include "safe_macros.h"
 
@@ -323,8 +323,9 @@ int safe_getresuid(const char *file, const int lineno, void (*cleanup_fn)(void),
 {
 	int rval;
 
-	rval = getresuid(ruid, euid, suid);
-	if (rval == -1) {
+	//rval = getresuid(ruid, euid, suid);
+    rval = -1;
+    if (rval == -1) {
 		tst_brkm(TBROK | TERRNO, cleanup_fn,
 			 "%s:%d: getresuid(%p, %p, %p) failed",
 			 file, lineno, ruid, euid, suid);
@@ -338,8 +339,9 @@ int safe_getresgid(const char *file, const int lineno, void (*cleanup_fn)(void),
 {
 	int rval;
 
-	rval = getresgid(rgid, egid, sgid);
-	if (rval == -1) {
+	//rval = getresgid(rgid, egid, sgid);
+    rval = -1;
+    if (rval == -1) {
 		tst_brkm(TBROK | TERRNO, cleanup_fn,
 			 "%s:%d: getresgid(%p, %p, %p) failed",
 			 file, lineno, rgid, egid, sgid);
@@ -643,8 +645,9 @@ void *safe_memalign(const char *file, const int lineno,
 {
 	void *rval;
 
-	rval = memalign(alignment, size);
-	if (rval == NULL)
+	//rval = memalign(alignment, size);
+    rval = NULL;
+    if (rval == NULL)
 		tst_brkm(TBROK | TERRNO, cleanup_fn, "memalign failed at %s:%d",
 			 file, lineno);
 
@@ -723,7 +726,8 @@ int safe_mount(const char *file, const int lineno, void (*cleanup_fn)(void),
 {
 	int rval;
 
-	rval = mount(source, target, filesystemtype, mountflags, data);
+	//rval = mount(source, target, filesystemtype, mountflags, data);
+    rval = -1;
 
 	/*
 	 * The FUSE filesystem executes mount.fuse helper, which tries to
@@ -762,8 +766,8 @@ int safe_umount(const char *file, const int lineno, void (*cleanup_fn)(void),
 {
 	int rval;
 
-	rval = umount(target);
-
+	//rval = umount(target);
+    rval = -1;
 	if (rval == -1) {
 		tst_brkm(TBROK | TERRNO, cleanup_fn,
 			 "%s:%d: umount(%s) failed",
@@ -842,7 +846,8 @@ int safe_setxattr(const char *file, const int lineno, const char *path,
 {
 	int rval;
 
-	rval = setxattr(path, name, value, size, flags);
+	//rval = setxattr(path, name, value, size, flags);
+    rval = -1;
 
 	if (rval) {
 		if (errno == ENOTSUP) {
@@ -863,7 +868,8 @@ int safe_lsetxattr(const char *file, const int lineno, const char *path,
 {
 	int rval;
 
-	rval = lsetxattr(path, name, value, size, flags);
+	//rval = lsetxattr(path, name, value, size, flags);
+    rval = 1;
 
 	if (rval) {
 		if (errno == ENOTSUP) {
@@ -884,7 +890,8 @@ int safe_fsetxattr(const char *file, const int lineno, int fd, const char *name,
 {
 	int rval;
 
-	rval = fsetxattr(fd, name, value, size, flags);
+	//rval = fsetxattr(fd, name, value, size, flags);
+    rval = 1;
 
 	if (rval) {
 		if (errno == ENOTSUP) {
@@ -905,8 +912,8 @@ int safe_removexattr(const char *file, const int lineno, const char *path,
 {
 	int rval;
 
-	rval = removexattr(path, name);
-
+	//rval = removexattr(path, name);
+    rval = 1;
 	if (rval) {
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, NULL,

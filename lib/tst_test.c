@@ -751,14 +751,14 @@ static void do_setup(int argc, char *argv[])
 		/* If we failed to mount read-only tmpfs. Fallback to
 		 * using a device with empty read-only filesystem.
 		 */
-		if (mount(NULL, tst_test->mntpoint, "tmpfs", MS_RDONLY, NULL)) {
+        if (FALSE){//mount(NULL, tst_test->mntpoint, "tmpfs", MS_RDONLY, NULL)) {
 			tst_res(TINFO | TERRNO, "Can't mount tmpfs read-only"
 				" at %s, setting up a device instead\n",
 				tst_test->mntpoint);
 			tst_test->mount_device = 1;
 			tst_test->needs_device = 1;
 			tst_test->format_device = 1;
-			tst_test->mnt_flags = MS_RDONLY;
+			//tst_test->mnt_flags = MS_RDONLY;
 		} else {
 			mntpoint_mounted = 1;
 		}

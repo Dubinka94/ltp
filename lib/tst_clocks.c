@@ -28,10 +28,12 @@
 
 int tst_clock_getres(clockid_t clk_id, struct timespec *res)
 {
-	return syscall(SYS_clock_getres, clk_id, res);
+    return clock_getres(clk_id, res);
+    //return syscall(SYS_clock_getres, clk_id, res);
 }
 
 int tst_clock_gettime(clockid_t clk_id, struct timespec *ts)
 {
-	return syscall(SYS_clock_gettime, clk_id, ts);
+    return clock_gettime(clk_id, ts);
+	//Jreturn syscall(SYS_clock_gettime, clk_id, ts);
 }

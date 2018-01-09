@@ -1,0 +1,20 @@
+#!/bin/sh
+
+export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.2.sdk
+export TOOLCHAINROOT=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
+
+export PATH=$PATH:$TOOLCHAINROOT/usr/bin
+export CC=$TOOLCHAINROOT/usr/bin/clang
+export CPP=$TOOLCHAINROOT/usr/bin/clang
+export CXX=$TOOLCHAINROOT/usr/bin/clang
+export LD=$TOOLCHAINROOT/usr/bin/ld
+export AR=$TOOLCHAINROOT/usr/bin/ar
+export LIB_DIR=$TOOLCHAINROOT/usr/lib
+export AS=$TOOLCHAINROOT/usr/bin/as
+export RANLIB=$TOOLCHAINROOT/usr/bin/ranlib
+export STRIP=$TOOLCHAINROOT/usr/bin/strip
+
+export CFLAGS="-dynamiclib -std=gnu99 -arch arm64 -isysroot $SDKROOT -mios-version-min=8.0"
+export CPPFLAGS="$CFLAGS"
+
+./configure -no-recursion AR=$AR CC=$CC RANLIB=$RANLIB STRIP=$STRIP --host=aarch64-apple-darwin11

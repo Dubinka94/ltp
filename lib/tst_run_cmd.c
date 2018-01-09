@@ -164,7 +164,8 @@ int tst_system(const char *command)
 	 */
 	void *old_handler = signal(SIGCHLD, SIG_DFL);
 
-	ret = system(command);
+	//ret = system(command);
+    ret = -1;
 
 	signal(SIGCHLD, old_handler);
 	return ret;

@@ -15,10 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sys/prctl.h>
+//#include <sys/prctl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
+#include <string.h>
 
 #define TST_NO_DEFAULT_MAIN
 #include "tst_test.h"

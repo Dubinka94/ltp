@@ -26,7 +26,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <sys/vfs.h>
+//#include <sys/vfs.h>
+#include <sys/param.h>
+#include <sys/mount.h>
 #include "test.h"
 #include "tst_fs.h"
 

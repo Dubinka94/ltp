@@ -40,7 +40,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifndef _DARWIN_C_SOURCE
 #include <elf.h>
+#endif
 #include <signal.h>
 #include <setjmp.h>
 #include "test.h"

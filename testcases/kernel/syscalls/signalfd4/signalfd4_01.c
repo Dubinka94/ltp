@@ -68,6 +68,10 @@
 
 #define SFD_CLOEXEC O_CLOEXEC
 
+#if defined(_DARWIN_C_SOURCE)
+#define _NSIG NSIG
+#endif
+
 char *TCID = "signalfd4_01";
 int testno;
 int TST_TOTAL = 1;

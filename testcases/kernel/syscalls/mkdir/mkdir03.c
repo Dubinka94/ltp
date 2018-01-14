@@ -24,6 +24,9 @@
 
 #include <errno.h>
 #include <sys/types.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <fcntl.h>

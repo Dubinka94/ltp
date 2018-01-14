@@ -59,8 +59,11 @@ static int has_attribute(const char *list, int llen, const char *attr)
 static void verify_listxattr(void)
 {
 	char buf[64];
-
-	TEST(listxattr(TESTFILE, buf, sizeof(buf)));
+#ifndef _DARWIN_C_SOURCE
+    TEST(listxattr(TESTFILE, buf, sizeof(buf)));
+#elseif
+    TEST(listxattr(TESTFILE, buf, sizeof(buf), 0));
+#endif
 	if (TEST_RETURN == -1) {
 		tst_res(TFAIL | TTERRNO, "listxattr() failed");
 		return;

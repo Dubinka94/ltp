@@ -25,7 +25,9 @@
  * 2cb4b05e7647891b46b91c07c9a60304803d1688
  */
 
+#ifndef _DARWIN_C_SOURCE
 #include <sys/sendfile.h>
+#endif
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
@@ -62,8 +64,12 @@ int main(int argc, char *argv[])
 	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
-		TEST(sendfile(out_fd, in_fd, NULL, strlen(TEST_MSG_IN)));
-
+#ifndef _DARWIN_C_SOURCE
+        TEST(sendfile(out_fd, in_fd, NULL, strlen(TEST_MSG_IN)));
+#elseif
+        off_t len = strlen(TEST_MSG_IN);
+        TEST(sendfile(in_fd, out_fd, 0, &len, NULL, 0));
+#endif
 		if (TEST_RETURN == -1)
 			tst_brkm(TBROK | TTERRNO, cleanup, "sendfile() failed");
 

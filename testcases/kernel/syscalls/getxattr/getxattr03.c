@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		tst_count = 0;
 
-		TEST(getxattr(TESTFILE, XATTR_TEST_KEY, NULL, 0));
+		TEST(getxattr(TESTFILE, XATTR_TEST_KEY, NULL, 0, 0, 0));
 
 		if (TEST_RETURN == XATTR_TEST_VALUE_SIZE)
 			tst_resm(TPASS, "getxattr(2) returned correct value");
@@ -92,8 +92,7 @@ static void setup(void)
 	fd = SAFE_CREAT(cleanup, TESTFILE, 0644);
 	close(fd);
 
-	if (setxattr(TESTFILE, XATTR_TEST_KEY, XATTR_TEST_VALUE,
-		     XATTR_TEST_VALUE_SIZE, XATTR_CREATE) == -1) {
+	if (setxattr(TESTFILE, XATTR_TEST_KEY, XATTR_TEST_VALUE, XATTR_TEST_VALUE_SIZE, 0, XATTR_CREATE) == -1) {
 		if (errno == ENOTSUP)
 			tst_brkm(TCONF, cleanup, "No xattr support in fs or "
 				 "fs mounted without user_xattr option");

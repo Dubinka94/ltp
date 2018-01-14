@@ -31,7 +31,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#ifndef _DARWIN_C_SOURCE
 #include <sys/sendfile.h>
+#endif
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
@@ -73,7 +75,15 @@ static void do_sendfile(void)
 
 	in_fd = SAFE_OPEN(cleanup, IN_FILE, O_RDONLY);
 
-	TEST(sendfile(out_fd, in_fd, NULL, sb.st_size));
+#ifndef _DARWIN_C_SOURCE
+    TEST(sendfile(out_fd, in_fd, NULL, sb.st_size));
+#elseif
+    off_t len = sb.st_size;
+    TEST(sendfile(in_fd, out_fd, 0, &len, NULL, 0));
+#endif
+
+
+
 	if ((after_pos = lseek(in_fd, 0, SEEK_CUR)) < 0) {
 		tst_brkm(TBROK, cleanup,
 			 "lseek after invoking sendfile failed: %d", errno);

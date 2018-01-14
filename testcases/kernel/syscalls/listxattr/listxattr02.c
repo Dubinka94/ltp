@@ -36,6 +36,9 @@
 #include "config.h"
 #include <errno.h>
 #include <sys/types.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 
 #ifdef HAVE_SYS_XATTR_H
 # include <sys/xattr.h>
@@ -67,8 +70,11 @@ static void verify_listxattr(unsigned int n)
 {
 	struct test_case *t = tc + n;
 	char buf[t->size];
-
-	TEST(listxattr(t->path, buf, sizeof(buf)));
+#ifndef _DARWIN_C_SOURCE
+    TEST(listxattr(t->path, buf, sizeof(buf)));
+#elseif
+    TEST(listxattr(t->path, buf, sizeof(buf), 0));
+#endif
 	if (TEST_RETURN != -1) {
 		tst_res(TFAIL,
 			"listxattr() succeeded unexpectedly (returned %ld)",

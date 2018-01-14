@@ -24,6 +24,9 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include "tst_test.h"
 
 static int socket_fd, accepted;

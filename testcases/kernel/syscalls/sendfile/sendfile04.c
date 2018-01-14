@@ -50,7 +50,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/sendfile.h>
+//#include <sys/sendfile.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/mman.h>
@@ -122,7 +122,10 @@ void do_sendfile(int prot, int pass_unmapped_buffer)
 			    sizeof(*protected_buffer));
 	}
 
-	TEST(sendfile(out_fd, in_fd, protected_buffer, sb.st_size));
+	//TEST(sendfile(out_fd, in_fd, protected_buffer, sb.st_size));
+    off_t len = sb.st_size;
+    TEST(sendfile(in_fd, out_fd, *protected_buffer, &len, NULL, 0));
+
 
 	if (TEST_RETURN != -1) {
 		tst_resm(TFAIL, "call succeeded unexpectedly");

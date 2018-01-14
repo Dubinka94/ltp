@@ -32,6 +32,9 @@
  */
 
 #include <errno.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include "tst_test.h"
 
 #define SIZE 512

@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-//#include <sys/prctl.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#else
+#include <sys/prctl.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-#include <string.h>
+
 
 #define TST_NO_DEFAULT_MAIN
 #include "tst_test.h"

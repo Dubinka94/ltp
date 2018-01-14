@@ -109,9 +109,11 @@ int main(int argc, char *argv[])
 		tst_count = 0;
 
 		for (i = 0; i < ARRAY_SIZE(tc); i++) {
-			TEST(getxattr(tc[i].fname, tc[i].key, tc[i].value,
-				      tc[i].size));
-
+#ifndef _DARWIN_C_SOURCE
+            TEST(getxattr(tc[i].fname, tc[i].key, tc[i].value, tc[i].size));
+#else
+            TEST(getxattr(tc[i].fname, tc[i].key, tc[i].value, tc[i].size, 0, 0));
+#endif
 			if (TEST_ERRNO == tc[i].exp_err) {
 				tst_resm(TPASS | TTERRNO, "expected behavior");
 			} else {
@@ -145,8 +147,11 @@ static void setup(void)
 	snprintf(filename, BUFSIZ, "getxattr01testfile");
 	fd = SAFE_CREAT(cleanup, filename, 0644);
 	close(fd);
-	if (setxattr(filename, XATTR_TEST_KEY, XATTR_TEST_VALUE,
-		     strlen(XATTR_TEST_VALUE), XATTR_CREATE) == -1) {
+#ifndef _DARWIN_C_SOURCE
+    if (setxattr(filename, XATTR_TEST_KEY, XATTR_TEST_VALUE, strlen(XATTR_TEST_VALUE), XATTR_CREATE) == -1) {
+#else
+    if (setxattr(filename, XATTR_TEST_KEY, XATTR_TEST_VALUE, strlen(XATTR_TEST_VALUE), 0, XATTR_CREATE) == -1) {
+#endif
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, cleanup, "No xattr support in fs or "
 				 "mount without user_xattr option");

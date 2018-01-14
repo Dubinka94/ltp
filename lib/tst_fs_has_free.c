@@ -22,9 +22,12 @@
  */
 
 #include <stdint.h>
+#ifndef _DARWIN_C_SOURCE
+#include <sys/vfs.h>
+#else
 #include <sys/param.h>
 #include <sys/mount.h>
-//#include <sys/vfs.h>
+#endif
 #include "test.h"
 #include "tst_fs.h"
 

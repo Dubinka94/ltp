@@ -45,7 +45,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#ifndef _DARWIN_C_SOURCE
 #include <sys/sendfile.h>
+#endif
 #include <sys/types.h>
 #include <unistd.h>
 #include <inttypes.h>
@@ -90,9 +92,14 @@ void do_sendfile(struct test_case_t *t)
 
 	out_fd = SAFE_OPEN(cleanup, out_file, O_WRONLY);
 	in_fd = SAFE_OPEN(cleanup, in_file, O_RDONLY);
-	before_pos = SAFE_LSEEK(cleanup, in_fd, 0, SEEK_CUR);
+    before_pos = SAFE_LSEEK(cleanup, in_fd, 0, SEEK_CUR);
 
-	TEST(sendfile(out_fd, in_fd, &t->offset, t->count));
+#ifndef _DARWIN_C_SOURCE
+    TEST(sendfile(out_fd, in_fd, &t->offset, t->count));
+#elseif
+    off_t len = t->count;
+    TEST(sendfile(in_fd, out_fd, t->offset, &len, NULL, 0));
+#endif
 	if (TEST_RETURN == -1)
 		tst_brkm(TBROK | TTERRNO, cleanup, "sendfile(2) failed");
 

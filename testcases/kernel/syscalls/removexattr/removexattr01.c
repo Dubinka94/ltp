@@ -71,8 +71,12 @@ static void verify_removexattr(void)
 	int size = 64;
 	char buf[size];
 
-	n = setxattr("testfile", USER_KEY, VALUE, VALUE_SIZE, XATTR_CREATE);
-	if (n == -1) {
+#ifndef _DARWIN_C_SOURCE
+    n = setxattr("testfile", USER_KEY, VALUE, VALUE_SIZE, XATTR_CREATE);
+#elseif
+    n = setxattr("testfile", USER_KEY, VALUE, VALUE_SIZE, 0, XATTR_CREATE);
+#endif
+    if (n == -1) {
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, cleanup, "no xattr support in fs or "
 				 "mounted without user_xattr option");
@@ -80,15 +84,21 @@ static void verify_removexattr(void)
 			tst_brkm(TFAIL | TERRNO, cleanup, "setxattr() failed");
 		}
 	}
-
-	TEST(removexattr("testfile", USER_KEY));
-	if (TEST_RETURN != 0) {
+#ifndef _DARWIN_C_SOURCE
+    TEST(removexattr("testfile", USER_KEY));
+#elseif
+    TEST(removexattr("testfile", USER_KEY, 0));
+#endif
+    if (TEST_RETURN != 0) {
 		tst_resm(TFAIL | TTERRNO, "removexattr() failed");
 		return;
 	}
-
-	n = getxattr("testfile", USER_KEY, buf, size);
-	if (n != -1) {
+#ifndef _DARWIN_C_SOURCE
+    n = getxattr("testfile", USER_KEY, buf, size);
+#elseif
+    n = getxattr("testfile", USER_KEY, buf, size, 0, 0);
+#endif
+    if (n != -1) {
 		tst_resm(TFAIL, "getxattr() succeeded for deleted key");
 		return;
 	}

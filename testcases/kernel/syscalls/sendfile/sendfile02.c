@@ -44,14 +44,21 @@
  * RESTRICTIONS
  *	NONE
  */
+
+
 #include <stdio.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#ifndef _DARWIN_C_SOURCE
 #include <sys/sendfile.h>
+#elseif
+#include <sys/uio.h>
+#endif
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
+
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -114,10 +121,13 @@ void do_sendfile(OFF_T offset, int i)
 		tst_brkm(TBROK, cleanup,
 			 "lseek before invoking sendfile failed: %d", errno);
 	}
-
-	TEST(sendfile(out_fd, in_fd, &offset, sb.st_size - offset));
-
-	if ((after_pos = lseek(in_fd, 0, SEEK_CUR)) < 0) {
+#ifndef _DARWIN_C_SOURCE
+    TEST(sendfile(out_fd, in_fd, &offset, sb.st_size - offset));
+#elseif
+    off_t len = sb.st_size - offset;
+    TEST(sendfile(in_fd, out_fd, offset, &len, NULL, 0));
+#endif
+    if ((after_pos = lseek(in_fd, 0, SEEK_CUR)) < 0) {
 		tst_brkm(TBROK, cleanup,
 			 "lseek after invoking sendfile failed: %d", errno);
 	}

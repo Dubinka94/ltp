@@ -129,8 +129,10 @@ int main(void)
 	test_sysconf(_SC_XOPEN_UNIX);
 	test_sysconf(_SC_PAGESIZE);
 	test_sysconf(_SC_PHYS_PAGES);
-	test_sysconf(_SC_AVPHYS_PAGES);
-	test_sysconf(_SC_AIO_MAX);
+#ifndef _DARWIN_C_SOURCE
+    test_sysconf(_SC_AVPHYS_PAGES);
+#endif
+    test_sysconf(_SC_AIO_MAX);
 	/* 41 - 45 */
 	test_sysconf(_SC_AIO_PRIO_DELTA_MAX);
 	test_sysconf(_SC_SEMAPHORES);

@@ -45,7 +45,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/sendfile.h>
+//#include <sys/sendfile.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/mman.h>
@@ -91,8 +91,10 @@ void do_sendfile(void)
 	}
 	SAFE_STAT(cleanup, in_file, &sb);
 
-	offset = -1;
-	TEST(sendfile(out_fd, in_fd, &offset, sb.st_size));
+	//offset = -1;
+	//TEST(sendfile(out_fd, in_fd, &offset, sb.st_size));
+    off_t len = sb.st_size;
+    TEST(sendfile(in_fd, out_fd, -1, &len, NULL, 0));
 
 	if (TEST_RETURN != -1) {
 		tst_resm(TFAIL, "call succeeded unexpectedly");

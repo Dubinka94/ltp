@@ -26,9 +26,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-//#include <sys/vfs.h>
+#ifndef _DARWIN_C_SOURCE
+#include <sys/vfs.h>
+#else
 #include <sys/param.h>
 #include <sys/mount.h>
+#endif
 #include "test.h"
 #include "tst_fs.h"
 

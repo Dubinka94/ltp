@@ -51,7 +51,9 @@
 #include <stdio.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifndef _DARWIN_C_SOURCE
 #include <sys/sendfile.h>
+#endif
 #include <sys/socket.h>
 #include "test.h"
 
@@ -86,8 +88,13 @@ int main(int ac, char **av)
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		tst_count = 0;
 
-		TEST(sendfile(out_fd, in_fd, NULL, 1));
 
+#ifndef _DARWIN_C_SOURCE
+        TEST(sendfile(out_fd, in_fd, NULL, 1));
+#elseif
+        off_t len = 1;
+        TEST(sendfile(in_fd, out_fd, 0, &len, NULL, 0));
+#endif
 		if (TEST_RETURN != -1) {
 			tst_resm(TFAIL, "call succeeded unexpectedly");
 			continue;

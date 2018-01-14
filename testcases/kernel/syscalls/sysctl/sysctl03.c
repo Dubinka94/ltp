@@ -67,8 +67,12 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#ifndef _DARWIN_C_SOURCE
 #include <linux/unistd.h>
 #include <linux/sysctl.h>
+#endif
+
+
 #include <pwd.h>
 
 char *TCID = "sysctl03";

@@ -19,6 +19,9 @@
 /*
  * Test for callback thread safety.
  */
+
+#ifndef _DARWIN_C_SOURCE
+
 #include <pthread.h>
 #include "tst_test.h"
 
@@ -74,3 +77,5 @@ static struct tst_test test = {
 	.setup = setup,
 	.cleanup = cleanup,
 };
+
+#endif

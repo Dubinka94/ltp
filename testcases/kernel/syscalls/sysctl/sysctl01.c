@@ -46,10 +46,13 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#ifndef _DARWIN_C_SOURCE
 #include <linux/version.h>
-#include <sys/utsname.h>
 #include <linux/unistd.h>
 #include <linux/sysctl.h>
+#endif
+#include <sys/utsname.h>
+
 
 char *TCID = "sysctl01";
 

@@ -163,9 +163,11 @@ int tst_system(const char *command)
 	 *callback function for test cases.
 	 */
 	void *old_handler = signal(SIGCHLD, SIG_DFL);
-
-	//ret = system(command);
+#ifndef _DARWIN_C_SOURCE
+	ret = system(command);
+#elseif
     ret = -1;
+#endif
 
 	signal(SIGCHLD, old_handler);
 	return ret;

@@ -48,6 +48,10 @@
 #include <errno.h>
 #include "tst_test.h"
 
+#ifdef _DARWIN_C_SOURCE
+#define O_DIRECT 0
+#endif
+
 static int badfd = -1;
 static int fd2, fd3, fd4 = -1;
 static char buf[BUFSIZ];

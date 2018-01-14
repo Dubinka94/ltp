@@ -58,6 +58,10 @@
 #include <errno.h>
 #include <signal.h>
 
+#if defined _DARWIN_C_SOURCE
+#define _NSIG NSIG
+#endif
+
 void cleanup(void);
 void setup(void);
 
@@ -67,6 +71,7 @@ int TST_TOTAL = 3;
 typedef void (*sighandler_t) (int);
 
 sighandler_t Tret;
+
 int sigs[] = { _NSIG + 1, SIGKILL, SIGSTOP };
 
 int main(int ac, char **av)

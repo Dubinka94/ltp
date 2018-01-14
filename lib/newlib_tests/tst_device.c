@@ -23,24 +23,28 @@
 
 static void do_test(void)
 {
-	int fd;
-	const char *dev;
-	uint64_t ltp_dev_size;
+#ifdef _DARWIN_C_SOURCE
+    tst_res(TFAIL, "Not supported on IOS");
+#elseif
+    int fd;
+    const char *dev;
+    uint64_t ltp_dev_size;
 
-	dev = tst_device->dev;
-	if (!dev)
-		tst_brk(TCONF, "Failed to acquire test device");
+    dev = tst_device->dev;
+    if (!dev)
+        tst_brk(TCONF, "Failed to acquire test device");
 
-	SAFE_MKFS(dev, "ext2", NULL, NULL);
+    SAFE_MKFS(dev, "ext2", NULL, NULL);
 
-	fd = SAFE_OPEN(dev, O_RDONLY);
-	SAFE_IOCTL(fd, BLKGETSIZE64, &ltp_dev_size);
-	SAFE_CLOSE(fd);
+    fd = SAFE_OPEN(dev, O_RDONLY);
+    SAFE_IOCTL(fd, BLKGETSIZE64, &ltp_dev_size);
+    SAFE_CLOSE(fd);
 
-	if (ltp_dev_size/1024/1024 == 300)
-		tst_res(TPASS, "Got expected device size");
-	else
-		tst_res(TFAIL, "Got unexpected device size");
+    if (ltp_dev_size/1024/1024 == 300)
+        tst_res(TPASS, "Got expected device size");
+    else
+        tst_res(TFAIL, "Got unexpected device size");
+#endif
 }
 
 static struct tst_test test = {

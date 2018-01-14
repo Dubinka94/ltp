@@ -46,8 +46,11 @@ static int check_suitable_buf(const char *name, long size)
 {
 	int n;
 	char buf[size];
-
-	n = listxattr(name, buf, sizeof(buf));
+#ifndef _DARWIN_C_SOURCE
+    n = listxattr(name, buf, sizeof(buf));
+#elseif
+    n = listxattr(name, buf, sizeof(buf), 0);
+#endif
 
 	return n != -1;
 }
@@ -55,8 +58,11 @@ static int check_suitable_buf(const char *name, long size)
 static void verify_listxattr(unsigned int n)
 {
 	const char *name = filename[n];
-
-	TEST(listxattr(name, NULL, 0));
+#ifndef _DARWIN_C_SOURCE
+    TEST(listxattr(name, NULL, 0));
+#elseif
+    TEST(listxattr(name, NULL, 0, 0));
+#endif
 	if (TEST_RETURN == -1) {
 		tst_res(TFAIL | TTERRNO, "listxattr() failed");
 		return;

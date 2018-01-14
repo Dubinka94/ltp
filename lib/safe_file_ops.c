@@ -313,8 +313,11 @@ void safe_cp(const char *file, const int lineno,
 
 	snprintf(buf, sizeof(buf), "cp \"%s\" \"%s\"", src, dst);
 
-	//ret = system(buf);
+#ifndef _DARWIN_C_SOURCE
+    ret = system(buf);
+#else
     ret = -1;
+#endif
 
 	if (ret) {
 		tst_brkm(TBROK, cleanup_fn,

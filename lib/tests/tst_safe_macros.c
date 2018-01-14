@@ -15,6 +15,10 @@ void cleanup(void)
 
 int main(int argc LTP_ATTRIBUTE_UNUSED, char **argv)
 {
+#ifdef _DARWIN_C_SOURCE
+    fprintf(stderr, "error: could not cp file\n");
+    return 1;
+#endif
 	char buf[10];
 	int fds[2];
 

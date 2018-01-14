@@ -97,11 +97,13 @@ struct test_case_t {		/* test case structure */
 	{
 	PF_INET, SOCK_STREAM, 0, buf, sizeof(buf), MSG_OOB,
 		    -1, EINVAL, setup1, cleanup1, "invalid MSG_OOB flag set"}
+#ifdef IP_RECVERR
 	,
 	{
 	PF_INET, SOCK_STREAM, 0, buf, sizeof(buf), MSG_ERRQUEUE,
 		    -1, EAGAIN, setup1, cleanup1, "invalid MSG_ERRQUEUE flag set"}
-,};
+#endif
+    ,};
 
 int TST_TOTAL = sizeof(tdat) / sizeof(tdat[0]);
 
@@ -124,14 +126,15 @@ int main(int argc, char *argv[])
 	for (lc = 0; TEST_LOOPING(lc); ++lc) {
 		tst_count = 0;
 		for (testno = 0; testno < TST_TOTAL; ++testno) {
-			if ((tst_kvercmp(3, 17, 0) < 0)
-			    && (tdat[testno].flags & MSG_ERRQUEUE)
+#ifdef IP_RECVERR
+            if ((tst_kvercmp(3, 17, 0) < 0)
+                && (tdat[testno].flags & MSG_ERRQUEUE)
 			    && (tdat[testno].type & SOCK_STREAM)) {
 				tst_resm(TCONF, "skip MSG_ERRQUEUE test, "
 						"it's supported from 3.17");
 				continue;
 			}
-
+#endif
 			tdat[testno].setup();
 			TEST(recv(s, tdat[testno].buf, tdat[testno].buflen,
 				  tdat[testno].flags));

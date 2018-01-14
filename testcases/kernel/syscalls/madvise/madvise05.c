@@ -29,13 +29,15 @@
 #include "tst_test.h"
 
 #define ALLOC_SIZE (32 * 1024 * 1024)
+#ifdef _DARWIN_C_SOURCE
+#define MAP_POPULATE 0
+#endif
 
 static void verify_madvise(void)
 {
 	void *p;
 
-	p = SAFE_MMAP(NULL, ALLOC_SIZE, PROT_READ,
-			MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
+	p = SAFE_MMAP(NULL, ALLOC_SIZE, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
 
 	TEST(mprotect(p, ALLOC_SIZE, PROT_NONE));
 	if (TEST_RETURN == -1)

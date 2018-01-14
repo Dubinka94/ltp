@@ -129,11 +129,12 @@
 				 */
 #endif
 
+#ifdef _DARWIN_C_SOURCE
 #define LIO_IO_TYPES            00061   /* all io types, non-async */
 #define LIO_WAIT_TYPES          00020000 /* all sync wait types (sorta) */
 #define LIO_WAIT_SIGSUSPEND     01000000 /* aio_suspend waiting for signal */
 #define LIO_WAIT_SIGTYPES    (LIO_WAIT_SIGPAUSE|LIO_WAIT_SIGACTIVE|LIO_WAIT_SIGSUSPEND)
-
+#endif
 
 /*
  * Define the structure as used in lio_parse_arg1 and lio_help1

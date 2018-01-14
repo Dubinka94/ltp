@@ -59,8 +59,9 @@ static int has_mkfs(const char *fs_type)
 
 static int has_kernel_support(const char *fs_type)
 {
-    return 0;
-
+#ifdef _DARWIN_C_SOURCE
+	return 0;
+#else
 	static int fuse_supported = -1;
 	const char *tmpdir = getenv("TMPDIR");
 	char buf[128];
@@ -69,7 +70,7 @@ static int has_kernel_support(const char *fs_type)
 	if (!tmpdir)
 		tmpdir = "/tmp";
 
-	//mount("/dev/zero", tmpdir, fs_type, 0, NULL);
+	mount("/dev/zero", tmpdir, fs_type, 0, NULL);
 	if (errno != ENODEV) {
 		tst_res(TINFO, "Kernel supports %s", fs_type);
 		return 1;
@@ -100,6 +101,7 @@ static int has_kernel_support(const char *fs_type)
 
 	tst_res(TINFO, "FUSE does support %s", fs_type);
 	return 1;
+#endif
 }
 
 static int is_supported(const char *fs_type)

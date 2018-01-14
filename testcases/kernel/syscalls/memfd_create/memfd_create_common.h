@@ -20,6 +20,10 @@
 #include <lapi/fcntl.h>
 #include <lapi/memfd.h>
 
+#ifdef _DARWIN_C_SOURCE
+typedef int64_t loff_t;
+#endif
+
 /* change macros accordingly if any flags need to be added in the future */
 #define FLAGS_ALL_ARRAY_INITIALIZER {MFD_CLOEXEC, MFD_ALLOW_SEALING}
 #define FLAGS_ALL_MASK              (MFD_CLOEXEC | MFD_ALLOW_SEALING)

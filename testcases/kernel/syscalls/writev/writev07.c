@@ -36,6 +36,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/uio.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include "tst_test.h"
 
 #define TESTFILE "testfile"

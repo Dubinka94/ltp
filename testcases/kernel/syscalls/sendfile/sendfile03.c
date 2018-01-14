@@ -49,7 +49,10 @@
 #include <stdio.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <sys/sendfile.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/uio.h>
+//#include <sys/sendfile.h>
 #include "test.h"
 
 #define FAILED 1
@@ -104,8 +107,9 @@ int main(int ac, char **av)
 				testcases[i].setupfunc();
 			}
 
-			TEST(sendfile(testcases[i].out_fd, testcases[i].in_fd,
-				      testcases[i].offset, testcases[i].count));
+			//TEST(sendfile(testcases[i].out_fd, testcases[i].in_fd, testcases[i].offset, testcases[i].count));
+            off_t len = testcases[i].count;
+            TEST(sendfile(testcases[i].in_fd, testcases[i].out_fd, *testcases[i].offset, &len, NULL, 0));
 
 			if (TEST_RETURN != -1) {
 				tst_resm(TFAIL, "call succeeded unexpectedly");

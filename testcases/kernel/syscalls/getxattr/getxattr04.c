@@ -65,7 +65,11 @@ static void loop_getxattr(void)
 	int res;
 
 	while (!end) {
-		res = getxattr(TEST_FILE, TRUSTED_SMALL, NULL, 0);
+#ifndef _DARWIN_C_SOURCE
+        res = getxattr(TEST_FILE, TRUSTED_SMALL, NULL, 0);
+#elseif
+        res = getxattr(TEST_FILE, TRUSTED_SMALL, NULL, 0, 0, 0);
+#endif
 		if (res == -1) {
 			if (errno == ENODATA) {
 				tst_res(TFAIL, "getxattr() failed to get an "

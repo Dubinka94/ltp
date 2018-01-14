@@ -40,9 +40,11 @@ static const char *clock_name(clockid_t clk_id)
 		return "CLOCK_REALTIME_COARSE";
 	case CLOCK_MONOTONIC:
 		return "CLOCK_MONOTONIC";
-	//case CLOCK_MONOTONIC_COARSE:
-	//	return "CLOCK_MONOTONIC_COARSE";
-	case CLOCK_MONOTONIC_RAW:
+#ifndef _DARWIN_C_SOURCE
+    case CLOCK_MONOTONIC_COARSE:
+        return "CLOCK_MONOTONIC_COARSE";
+#endif
+    case CLOCK_MONOTONIC_RAW:
 		return "CLOCK_MONOTONIC_RAW";
 	case CLOCK_BOOTTIME:
 		return "CLOCK_BOOTTIME";

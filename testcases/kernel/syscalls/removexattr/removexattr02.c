@@ -83,8 +83,11 @@ int main(int ac, char **av)
 
 static void verify_removexattr(struct test_case *tc)
 {
-
-	TEST(removexattr(tc->path, tc->name));
+#ifndef _DARWIN_C_SOURCE
+    TEST(removexattr(tc->path, tc->name));
+#elseif
+    TEST(removexattr(tc->path, tc->name, 0));
+#endif
 	if (TEST_RETURN == -1 && TEST_ERRNO == ENOTSUP) {
 		tst_brkm(TCONF, cleanup, "No xattr support in fs or "
 			 "mount without user_xattr option");

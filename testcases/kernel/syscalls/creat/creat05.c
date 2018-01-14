@@ -29,7 +29,9 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#ifndef _DARWIN_C_SOURCE
 #include <linux/limits.h>
+#endif
 #include <unistd.h>
 #include "tst_test.h"
 

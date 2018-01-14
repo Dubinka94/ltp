@@ -23,17 +23,22 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/syscall.h>
-
 #include "tst_clocks.h"
 
 int tst_clock_getres(clockid_t clk_id, struct timespec *res)
 {
+#ifdef DARWIN_C_SOURCE
     return clock_getres(clk_id, res);
-    //return syscall(SYS_clock_getres, clk_id, res);
+#elseif
+    return syscall(SYS_clock_getres, clk_id, res);
+#endif
 }
 
 int tst_clock_gettime(clockid_t clk_id, struct timespec *ts)
 {
+#ifdef DARWIN_C_SOURCE
     return clock_gettime(clk_id, ts);
-	//Jreturn syscall(SYS_clock_gettime, clk_id, ts);
+#elseif
+    return syscall(SYS_clock_gettime, clk_id, ts);
+#endif
 }

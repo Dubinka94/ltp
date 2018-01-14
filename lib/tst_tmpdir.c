@@ -318,8 +318,11 @@ void tst_rmdir(void)
 	 * This is needed to overcome the NFS "silly rename" feature.
 	 */
 	if (tst_futexes) {
-		msync((void *)tst_futexes, getpagesize(), MS_SYNC);
-		munmap((void *)tst_futexes, getpagesize());
+#ifndef _DARWIN_C_SOURCE
+        msync((void *)tst_futexes, getpagesize(), MS_SYNC);
+        munmap((void *)tst_futexes, getpagesize());
+#endif
+
 	}
 
 	/*

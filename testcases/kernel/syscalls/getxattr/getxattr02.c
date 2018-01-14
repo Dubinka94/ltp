@@ -41,7 +41,9 @@
 #include "config.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef _DARWIN_C_SOURCE
 #include <sys/sysmacros.h>
+#endif
 #include <sys/wait.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -51,7 +53,7 @@
 #include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_SYS_XATTR_H
-# include <sys/xattr.h>
+#include <sys/xattr.h>
 #endif
 #include "test.h"
 #include "safe_macros.h"
@@ -103,8 +105,11 @@ int main(int argc, char *argv[])
 			exp_eno = EPERM;
 
 		for (i = 0; i < TST_TOTAL; i++) {
-			TEST(getxattr(tc[0], XATTR_TEST_KEY, buf, BUFSIZ));
-
+#ifndef _DARWIN_C_SOURCE
+            TEST(getxattr(tc[0], XATTR_TEST_KEY, buf, BUFSIZ));
+#elseif
+            TEST(getxattr(tc[0], XATTR_TEST_KEY, buf, BUFSIZ, 0, 0));
+#endif
 			if (TEST_RETURN == -1 && TEST_ERRNO == exp_eno)
 				tst_resm(TPASS | TTERRNO, "expected behavior");
 			else
@@ -129,7 +134,11 @@ static void setup(void)
 	/* Test for xattr support */
 	fd = SAFE_CREAT(cleanup, "testfile", 0644);
 	close(fd);
-	if (setxattr("testfile", "user.test", "test", 4, XATTR_CREATE) == -1)
+#ifndef _DARWIN_C_SOURCE
+    if (setxattr("testfile", "user.test", "test", 4, XATTR_CREATE) == -1)
+#elseif
+    if (setxattr("testfile", "user.test", "test", 4, 0,XATTR_CREATE) == -1)
+#endif
 		if (errno == ENOTSUP)
 			tst_brkm(TCONF, cleanup, "No xattr support in fs or "
 				 "mount without user_xattr option");

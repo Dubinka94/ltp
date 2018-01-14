@@ -18,6 +18,12 @@
 #include "tst_test.h"
 #include "tst_safe_stdio.h"
 #include "lapi/syscalls.h"
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#include <stdlib.h>
+
+typedef int64_t loff_t;
+#endif
 
 #define TEST_FILE_1 "copy_file_range_ltp01.txt"
 #define TEST_FILE_2 "copy_file_range_ltp02.txt"

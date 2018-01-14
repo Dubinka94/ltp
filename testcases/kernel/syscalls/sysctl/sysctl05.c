@@ -49,9 +49,11 @@
 #include "test.h"
 #include <stdio.h>
 #include <unistd.h>
+#ifndef _DARWIN_C_SOURCE
 #include <linux/unistd.h>
 #include <linux/sysctl.h>
 #include <linux/version.h>
+#endif
 #include <errno.h>
 
 char *TCID = "sysctl05";

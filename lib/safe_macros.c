@@ -14,7 +14,11 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <unistd.h>
+#ifndef _DARWIN_C_SOURCE
+#include <malloc.h>
+#elseif
 #include <malloc/malloc.h>
+#endif
 #include "test.h"
 #include "safe_macros.h"
 
@@ -322,9 +326,11 @@ int safe_getresuid(const char *file, const int lineno, void (*cleanup_fn)(void),
 		   uid_t *ruid, uid_t *euid, uid_t *suid)
 {
 	int rval;
-
-	//rval = getresuid(ruid, euid, suid);
+#ifndef _DARWIN_C_SOURCE
+    rval = getresuid(ruid, euid, suid);
+#elseif
     rval = -1;
+#endif
     if (rval == -1) {
 		tst_brkm(TBROK | TERRNO, cleanup_fn,
 			 "%s:%d: getresuid(%p, %p, %p) failed",
@@ -338,9 +344,11 @@ int safe_getresgid(const char *file, const int lineno, void (*cleanup_fn)(void),
 		   gid_t *rgid, gid_t *egid, gid_t *sgid)
 {
 	int rval;
-
-	//rval = getresgid(rgid, egid, sgid);
+#ifndef _DARWIN_C_SOURCE
+    rval = getresgid(rgid, egid, sgid);
+#elseif
     rval = -1;
+#endif
     if (rval == -1) {
 		tst_brkm(TBROK | TERRNO, cleanup_fn,
 			 "%s:%d: getresgid(%p, %p, %p) failed",
@@ -645,8 +653,13 @@ void *safe_memalign(const char *file, const int lineno,
 {
 	void *rval;
 
-	//rval = memalign(alignment, size);
+#ifndef _DARWIN_C_SOURCE
+    rval = memalign(alignment, size);
+#elseif
     rval = NULL;
+#endif
+
+
     if (rval == NULL)
 		tst_brkm(TBROK | TERRNO, cleanup_fn, "memalign failed at %s:%d",
 			 file, lineno);
@@ -725,10 +738,11 @@ int safe_mount(const char *file, const int lineno, void (*cleanup_fn)(void),
 	       const void *data)
 {
 	int rval;
-
-	//rval = mount(source, target, filesystemtype, mountflags, data);
+#ifndef _DARWIN_C_SOURCE
+    rval = mount(source, target, filesystemtype, mountflags, data);
+#elseif
     rval = -1;
-
+#endif
 	/*
 	 * The FUSE filesystem executes mount.fuse helper, which tries to
 	 * execute corresponding binary name which is encoded at the start of
@@ -765,9 +779,11 @@ int safe_umount(const char *file, const int lineno, void (*cleanup_fn)(void),
 		const char *target)
 {
 	int rval;
-
-	//rval = umount(target);
+#ifndef _DARWIN_C_SOURCE
+    rval = umount(target);
+#elseif
     rval = -1;
+#endif
 	if (rval == -1) {
 		tst_brkm(TBROK | TERRNO, cleanup_fn,
 			 "%s:%d: umount(%s) failed",
@@ -845,10 +861,11 @@ int safe_setxattr(const char *file, const int lineno, const char *path,
 		  const char *name, const void *value, size_t size, int flags)
 {
 	int rval;
-
-	//rval = setxattr(path, name, value, size, flags);
+#ifndef _DARWIN_C_SOURCE
+    rval = setxattr(path, name, value, size, flags);
+#elseif
     rval = -1;
-
+#endif
 	if (rval) {
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, NULL,
@@ -867,10 +884,11 @@ int safe_lsetxattr(const char *file, const int lineno, const char *path,
 		   const char *name, const void *value, size_t size, int flags)
 {
 	int rval;
-
-	//rval = lsetxattr(path, name, value, size, flags);
+#ifndef _DARWIN_C_SOURCE
+    rval = lsetxattr(path, name, value, size, flags);
+#elseif
     rval = 1;
-
+#endif
 	if (rval) {
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, NULL,
@@ -889,10 +907,11 @@ int safe_fsetxattr(const char *file, const int lineno, int fd, const char *name,
 		   const void *value, size_t size, int flags)
 {
 	int rval;
-
-	//rval = fsetxattr(fd, name, value, size, flags);
+#ifndef _DARWIN_C_SOURCE
+    rval = fsetxattr(fd, name, value, size, flags);
+#elseif
     rval = 1;
-
+#endif
 	if (rval) {
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, NULL,
@@ -911,9 +930,11 @@ int safe_removexattr(const char *file, const int lineno, const char *path,
 		const char *name)
 {
 	int rval;
-
-	//rval = removexattr(path, name);
+#ifndef _DARWIN_C_SOURCE
+    rval = removexattr(path, name);
+#elseif
     rval = 1;
+#endif
 	if (rval) {
 		if (errno == ENOTSUP) {
 			tst_brkm(TCONF, NULL,

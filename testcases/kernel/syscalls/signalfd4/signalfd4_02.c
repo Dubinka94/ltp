@@ -63,6 +63,10 @@
 
 #define SFD_NONBLOCK O_NONBLOCK
 
+#if defined(_DARWIN_C_SOURCE)
+#define _NSIG NSIG
+#endif
+
 char *TCID = "signalfd4_02";
 int testno;
 int TST_TOTAL = 1;

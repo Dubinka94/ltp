@@ -39,6 +39,9 @@
 #include <grp.h>
 #include <pwd.h>
 #include <sys/mount.h>
+#ifdef _DARWIN_C_SOURCE
+#include <sys/param.h>
+#endif
 
 #include "test.h"
 #include "safe_macros.h"

@@ -59,8 +59,10 @@ static struct results *results;
 
 static int ipc_fd;
 
+#ifndef _DARWIN_C_SOURCE
 extern void *tst_futexes;
 extern unsigned int tst_max_futexes;
+#endif
 
 #define IPC_ENV_VAR "LTP_IPC_PATH"
 
@@ -111,8 +113,11 @@ static void setup_ipc(void)
 	SAFE_CLOSE(ipc_fd);
 
 	if (tst_test->needs_checkpoints) {
-		tst_futexes = (char*)results + sizeof(struct results);
-		tst_max_futexes = (size - sizeof(struct results))/sizeof(futex_t);
+#ifndef _DARWIN_C_SOURCE
+    tst_futexes = (char*)results + sizeof(struct results);
+    tst_max_futexes = (size - sizeof(struct results))/sizeof(futex_t);
+#endif
+
 	}
 }
 
@@ -148,9 +153,10 @@ void tst_reinit(void)
 	fd = SAFE_OPEN(path, O_RDWR);
 
 	ptr = SAFE_MMAP(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-	tst_futexes = (char*)ptr + sizeof(struct results);
-	tst_max_futexes = (size - sizeof(struct results))/sizeof(futex_t);
-
+#ifndef _DARWIN_C_SOURCE
+    tst_futexes = (char*)ptr + sizeof(struct results);
+    tst_max_futexes = (size - sizeof(struct results))/sizeof(futex_t);
+#endif
 	SAFE_CLOSE(fd);
 }
 
@@ -746,24 +752,24 @@ static void do_setup(int argc, char *argv[])
 	     tst_test->all_filesystems) && !tst_test->mntpoint) {
 		tst_brk(TBROK, "tst_test->mntpoint must be set!");
 	}
-
+#ifndef _DARWIN_C_SOURCE
 	if (tst_test->needs_rofs) {
 		/* If we failed to mount read-only tmpfs. Fallback to
 		 * using a device with empty read-only filesystem.
 		 */
-        if (FALSE){//mount(NULL, tst_test->mntpoint, "tmpfs", MS_RDONLY, NULL)) {
+        if (mount(NULL, tst_test->mntpoint, "tmpfs", MS_RDONLY, NULL)) {
 			tst_res(TINFO | TERRNO, "Can't mount tmpfs read-only"
 				" at %s, setting up a device instead\n",
 				tst_test->mntpoint);
 			tst_test->mount_device = 1;
 			tst_test->needs_device = 1;
 			tst_test->format_device = 1;
-			//tst_test->mnt_flags = MS_RDONLY;
+			tst_test->mnt_flags = MS_RDONLY;
 		} else {
 			mntpoint_mounted = 1;
 		}
 	}
-
+#endif
 	if (tst_test->needs_device && !mntpoint_mounted) {
 		tdev.dev = tst_acquire_device_(NULL, tst_test->dev_min_size);
 
@@ -806,7 +812,7 @@ static void do_cleanup(void)
 
 	if (tst_tmpdir_created()) {
 		/* avoid munmap() on wrong pointer in tst_rmdir() */
-		tst_futexes = NULL;
+		//tst_futexes = NULL;
 		tst_rmdir();
 	}
 

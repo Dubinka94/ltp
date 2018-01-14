@@ -19,7 +19,10 @@
 /*
  * Basic unit test for the tst_strstatus() function.
  */
-
+ 
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include "tst_test.h"
 
 static struct tcase {

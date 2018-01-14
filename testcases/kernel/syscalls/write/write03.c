@@ -32,6 +32,9 @@
 
 #include <stdio.h>
 #include <errno.h>
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include "tst_test.h"
 
 static char *bad_addr;

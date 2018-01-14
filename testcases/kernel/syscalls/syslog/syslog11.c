@@ -68,7 +68,9 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
+#ifndef _DARWIN_C_SOURCE
 #include <linux/unistd.h>
+#endif
 #include <sys/syscall.h>
 #include "test.h"
 #include "safe_macros.h"

@@ -26,7 +26,9 @@
  *  and expects success.
  *
  */
-
+#ifdef _DARWIN_C_SOURCE
+#include <string.h>
+#endif
 #include "lapi/getrandom.h"
 #include "lapi/syscalls.h"
 #include "tst_test.h"

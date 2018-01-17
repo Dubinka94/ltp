@@ -13,4 +13,4 @@ fi
 
 find pan testcases/kernel/syscalls  -perm +111 -type f \
 -not -name "*.sh" -not -name "*.cgi" -not -name "*.cstemp" \
--exec codesign -s "iPhone Developer: Dan Kotovski (G3WB73Q54Q)" {} \;
+-exec codesign -s "$IDENTITY" {} \;

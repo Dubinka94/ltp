@@ -23,5 +23,7 @@ export CFLAGS="$COMMON_OPTIONS -dynamiclib -std=gnu99 -D _DARWIN_C_SOURCE"
 export CPPFLAGS=$CFLAGS
 export LDFLAGS="$COMMON_OPTIONS"
 
+export LEX=":"
+
 make autotools
 ./configure --host=aarch64-apple-darwin11 -no-recursion

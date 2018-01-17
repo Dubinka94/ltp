@@ -33,7 +33,11 @@
 /* $Id: ltp-bump.c,v 1.1 2009/05/19 09:39:11 subrata_modak Exp $ */
 #include <stdio.h>
 #include <errno.h>
+#ifndef _DARWIN_C_SOURCE
 #include <sys/signal.h>
+#else
+#include <signal.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>

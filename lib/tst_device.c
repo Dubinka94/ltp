@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #ifndef _DARWIN_C_SOURCE
 #include <linux/loop.h>
-#elseif
+#else
 #import <fcntl.h>
 #endif
 #include <stdint.h>

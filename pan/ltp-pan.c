@@ -65,6 +65,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
 
 #include "splitstr.h"
 #include "zoolib.h"

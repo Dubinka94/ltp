@@ -1,9 +1,8 @@
 #!/bin/sh
 
-export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.2.sdk
-export TOOLCHAINROOT=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
-export PATH=$PATH:$TOOLCHAINROOT/usr/bin
-export PATH_BIN=$TOOLCHAINROOT/usr/bin
+SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.2.sdk
+TOOLCHAINROOT=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
+PATH_BIN=$TOOLCHAINROOT/usr/bin
 
 export CC=$PATH_BIN/clang
 export CPP=$PATH_BIN/clang
@@ -15,8 +14,14 @@ export AS=$PATH_BIN/as
 export RANLIB=$PATH_BIN/ranlib
 export STRIP=$PATH_BIN/strip
 
-export CFLAGS="-dynamiclib -std=gnu99 -arch arm64 -isysroot $SDKROOT -mios-version-min=8.0 -D _DARWIN_C_SOURCE"
-export CPPFLAGS="$CFLAGS"
-export LDFLAGS="$CFLAGS"
+#TODO:remove -dynamiclib from global configuration
+#TODO:figureout how mios-version-min work.
 
-./configure AR=$AR CC=$CC RANLIB=$RANLIB STRIP=$STRIP --host=aarch64-apple-darwin11 -no-recursion
+COMMON_OPTIONS="-arch arm64 -isysroot $SDKROOT"
+
+export CFLAGS="$COMMON_OPTIONS -dynamiclib -std=gnu99 -D _DARWIN_C_SOURCE"
+export CPPFLAGS=$CFLAGS
+export LDFLAGS="$COMMON_OPTIONS"
+
+make autotools
+./configure --host=aarch64-apple-darwin11 -no-recursion

@@ -16,7 +16,7 @@ FILTER_OUT_MAKE_TARGETS	+= test08
 endif
 
 ifeq ($(IOS),1)
-FILTER_OUT_MAKE_TARGETS	+= test16
+FILTER_OUT_MAKE_TARGETS	+= test16 test17
 endif
 
 

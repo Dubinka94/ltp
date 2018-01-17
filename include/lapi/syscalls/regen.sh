@@ -32,7 +32,9 @@ cat << EOF > "${output_pid}"
 
 #include <errno.h>
 #include <sys/syscall.h>
+#ifndef _DARWIN_C_SOURCE
 #include <asm/unistd.h>
+#endif
 #include "cleanup.c"
 
 #define ltp_syscall(NR, ...) ({ \\

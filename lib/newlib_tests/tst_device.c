@@ -25,7 +25,7 @@ static void do_test(void)
 {
 #ifdef _DARWIN_C_SOURCE
     tst_res(TFAIL, "Not supported on IOS");
-#elseif
+#else
     int fd;
     const char *dev;
     uint64_t ltp_dev_size;

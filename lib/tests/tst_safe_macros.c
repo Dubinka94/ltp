@@ -18,7 +18,7 @@ int main(int argc LTP_ATTRIBUTE_UNUSED, char **argv)
 #ifdef _DARWIN_C_SOURCE
     fprintf(stderr, "error: could not cp file\n");
     return 1;
-#endif
+#else
 	char buf[10];
 	int fds[2];
 
@@ -41,4 +41,5 @@ int main(int argc LTP_ATTRIBUTE_UNUSED, char **argv)
 	SAFE_PIPE(NULL, fds);
 
 	return 0;
+#endif
 }

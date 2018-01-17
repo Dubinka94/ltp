@@ -5,7 +5,6 @@ TOOLCHAINROOT=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault
 PATH_BIN=$TOOLCHAINROOT/usr/bin
 
 export CC=$PATH_BIN/clang
-export CPP=$PATH_BIN/clang
 export CXX=$PATH_BIN/clang
 export LD=$PATH_BIN/ld
 export AR=$PATH_BIN/ar
@@ -20,7 +19,6 @@ export STRIP=$PATH_BIN/strip
 COMMON_OPTIONS="-arch arm64 -isysroot $SDKROOT"
 
 export CFLAGS="$COMMON_OPTIONS -dynamiclib -std=gnu99 -D _DARWIN_C_SOURCE"
-export CPPFLAGS=$CFLAGS
 export LDFLAGS="$COMMON_OPTIONS"
 
 export LEX=":"

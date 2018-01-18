@@ -10,6 +10,7 @@ core
 lib*.a
 *.DS_Store
 *.dSYM
+*.xcuserstate
 
 /aclocal.m4
 autom4te.cache
